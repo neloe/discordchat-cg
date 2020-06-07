@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<style>
+		.monospace {
+			font-family: monospace;
+		}
+	</style>
+</head>
+<body>
+	<!--
+	<p>
+		Hello, I'm one of the panels in your bundle!
+		I'm where you put your controls.
+	</p>
+
+	<p>To edit me, open "<span id="path" class="monospace"></span>" in your favorite text editor or IDE.</p>
+
+	<p>
+		You can use any libraries, frameworks, and tools you want.
+		The only limit of panels is that they cannot render outside of their
+		<span class="monospace">&lt;iframe&gt;</span>'s bounding box.
+	</p>
+
+	<p>Visit <a href="https://nodecg.com" target="_blank" rel="noopener">https://nodecg.com</a> for full documentation.</p>
+
+	<p>You've got this!</p>
+	-->
+	<div>
+		<label for='token'>Token</label>
+		<input name='token' id='token' oninput='updateToken()' type='password'>
+	</div>
+	<div>
+		<label for='channels'>Channel</label>
+		<select name='channels' id='channels' onchange='changeChannel()'></select>
+	</div>
+	<script type="text/javascript" src="./discord.master.min.js"></script>
+	<script>
+		const client = new Discord.Client();
+
+		const chanRep = nodecg.Replicant('chanRep', { defaultValue: 'general', persistent:true })
+		const tokenRep = nodecg.Replicant('tokenRep', {persistent:true})
+		const chanIDRep = nodecg.Replicant('chanIDRep')
+
+		chanRep.on('change', (newValue, oldValue) => {
+    console.log(`myRep changed from ${oldValue} to ${newValue}`);
+});
+
+		tokenRep.on('change', (newValue, oldValue) => {
+			client.login(tokenRep.value)
+			document.getElementById('token').value = tokenRep.value
+		})
+
+		function updateToken() {
+			tokenRep.value=document.getElementById('token').value
+			console.log(document.getElementById('token').value)
+		}
+		function changeChannel() {
+			nodecg.log.info(document.getElementById('channels').value)
+			chanRep.value=document.getElementById('channels').value
+		}
+
+		client.once('ready', ()=> {
+			let idx = 0
+			let selidx = 0
+			nodecg.log.info('replicant ' + chanRep.value)
+			let targetChannel = chanRep.value
+			client.channels.cache.forEach(channel=>{
+				if (channel.type==='text')
+				{
+					let opt = document.createElement('option')
+					opt.setAttribute('value', channel.id)
+					opt.textContent=channel.name
+					if (targetChannel === channel.id)
+						opt.setAttribute('selected', 'true')
+					document.getElementById('channels').appendChild(opt)
+					idx += 1
+				}
+				
+			})
+			console.log(document.getElementById('channels').seletedIndex)
+			changeChannel()
+		})
+		//document.getElementById('path').textContent = `nodecg${window.location.pathname}`;
+
+		
+		// You can access the NodeCG api anytime from the `window.nodecg` object
+		// Or just `nodecg` for short. Like this!:
+		nodecg.log.info('Here\'s an example of using NodeCG\'s logging API!');
+		//client.login()
+	</script>
+</body>
+</html>

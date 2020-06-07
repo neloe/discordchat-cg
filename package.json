@@ -1,0 +1,43 @@
+{
+  "name": "discord-chat",
+  "version": "0.0.0",
+  "description": "A bot driven text chat overlay that should (hopefully) be resizable",
+  "homepage": "",
+  "author": {
+    "name": "Nathan Eloe",
+    "email": "powerofazure@gmail.com",
+    "url": ""
+  },
+  "files": [
+    "dashboard",
+    "graphics",
+    "extension.js",
+    "extension"
+  ],
+  "keywords": [
+    "discord",
+    "chat",
+    "nodecg-bundle"
+  ],
+  "nodecg": {
+    "compatibleRange": "^1.1.1",
+    "dashboardPanels": [
+      {
+        "name": "discord-chat",
+        "title": "Discord Chat",
+        "width": 2,
+        "file": "discord-chat.html",
+        "headerColor": "#525F78"
+      }
+    ],
+    "graphics": [
+      {
+        "file": "index.html",
+        "width": 1280,
+        "height": 720
+      }
+    ]
+  },
+  "repository": "https://github.com/nodecg/nodecg.git",
+  "license": "Apache-2.0"
+}
