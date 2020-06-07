@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack-subset.css'>
+	<style>
+		body {
+			font-family: sans-serif;
+			width:200px;
+			height:200px;
+			background-color: black;
+			display:flex;
+			flex-direction: column
+		}
+		.user {
+			color:cadetblue;
+		}
+		.content {
+			color: cornsilk;
+			width: 100%;
+		}
+		.channel {
+			color:cornsilk;
+			font-size: 110%;
+			text-align: center;
+			width: 100%;
+			font-family:Hack;
+		}
+		#messages {
+			overflow:hidden
+		}
+		.monospace {
+			font-family: monospace;
+		}
+	</style>
+</head>
+<body>
+	<div id='channel' class='channel'></div>
+	<div id='messages'>
+
+	</div>
+
+	<script type="text/javascript" src="./discord.master.min.js"></script>
+	<script>
+		//document.getElementById('path').textContent = `nodecg${window.location.pathname}`;
+
+		// You can access the NodeCG api anytime from the `window.nodecg` object
+		// Or just `nodecg` for short. Like this!:
+		nodecg.log.info('Here\'s an example of using NodeCG\'s logging API!');
+
+		const chanRep = nodecg.Replicant('chanRep', { defaultValue: 'general', persistent:true })
+		const tokenRep = nodecg.Replicant('tokenRep', {persistent:true})
+		const msgs = document.getElementById('messages')
+		let clientReady = false
+		let channelID = null
+		let channel = null
+
+		function buildmsg(message) {
+			let mdiv = document.createElement('div')
+			mdiv.setAttribute('class', 'message')
+			let uspan = document.createElement('span')
+			uspan.setAttribute('class', 'user')
+			uspan.textContent = message.author.username + ':'
+			let cspan = document.createElement('span')
+			cspan.setAttribute('class', 'content')
+			cspan.textContent = message.content
+			mdiv.appendChild(uspan)
+			mdiv.appendChild(cspan)
+			return mdiv
+		}
+
+		function getLastMessages()
+		{
+			if (clientReady && channelID)
+			{
+				client.channels.fetch(channelID).then(ch => {
+				channel = ch
+				document.getElementById('channel').textContent=`#${channel.name}`
+
+				ch.messages.fetch({limit:10}).then(messages=>{
+					console.log(messages)
+					
+					while (msgs.lastElementChild)
+						msgs.removeChild(msgs.lastElementChild)
+					messages.forEach(msg=>{
+						if (msgs.childNodes.length == 0)
+							msgs.appendChild(buildmsg(msg))
+						else 
+							msgs.insertBefore(buildmsg(msg), msgs.childNodes[0])	
+					})
+					console.log(msgs.scrollHeight)
+					msgs.scrollTop = msgs.scrollHeight
+				})
+			})
+			}
+		}
+
+		tokenRep.on('change', (newValue, oldValue) => {
+			client.login(tokenRep.value)
+			client.on('ready', function() {
+				clientReady = true
+				getLastMessages()
+			})
+		})
+
+		
+
+		chanRep.on('change', (newValue, oldValue) => {
+			console.log(`myRep changed from ${oldValue} to ${newValue}`)
+			channelID = newValue
+			getLastMessages()
+		});
+
+		
+
+		const client = new Discord.Client();
+
+		
+
+		client.on('message', msg => {
+			nodecg.log.info(msg)
+			nodecg.log.info(channel)
+			
+			if (msg.channel.id === chanRep.value)
+				msgs.appendChild(buildmsg(msg))	
+			msgs.scrollTop = msgs.scrollHeight	
+		})
+	</script>
+</body>
+</html>
