@@ -90,12 +90,14 @@
 					while (msgs.lastElementChild)
 						msgs.removeChild(msgs.lastElementChild)
 					messages.forEach(msg=>{
-						let m = buildmsg(msg)
-						if (msgs.childNodes.length == 0)
-							msgs.appendChild(m)
-						else 
-							msgs.insertBefore(m, msgs.childNodes[0])	
-						m.scrollIntoView()
+						if (!msg.deleted){
+							let m = buildmsg(msg)
+							if (msgs.childNodes.length == 0)
+								msgs.appendChild(m)
+							else 
+								msgs.insertBefore(m, msgs.childNodes[0])	
+							m.scrollIntoView()
+						}
 					})
 					console.log(msgs.scrollHeight)
 					msgs.scrollTop = msgs.scrollHeight
