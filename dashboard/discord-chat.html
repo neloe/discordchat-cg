@@ -42,6 +42,9 @@
 		const chanRep = nodecg.Replicant('chanRep', { defaultValue: 'general', persistent:true })
 		const tokenRep = nodecg.Replicant('tokenRep', {persistent:true})
 		const chanIDRep = nodecg.Replicant('chanIDRep')
+    const chanNameRep = nodecg.Replicant('chanNameRep', { defaultValue: 'general', persistent:true })
+
+    const channelDict = {}
 
 		chanRep.on('change', (newValue, oldValue) => {
     console.log(`myRep changed from ${oldValue} to ${newValue}`);
@@ -58,7 +61,10 @@
 		}
 		function changeChannel() {
 			nodecg.log.info(document.getElementById('channels').value)
+      nodecg.log.info('in changeChannel')
 			chanRep.value=document.getElementById('channels').value
+      chanNameRep.value = channelDict[document.getElementById('channels').value]
+      nodecg.log.info(channelDict[document.getElementById('channels').value])
 		}
 
 		client.once('ready', ()=> {
@@ -71,20 +77,21 @@
 				{
 					let opt = document.createElement('option')
 					opt.setAttribute('value', channel.id)
+          channelDict[channel.id] = channel.name
 					opt.textContent=channel.name
 					if (targetChannel === channel.id)
 						opt.setAttribute('selected', 'true')
 					document.getElementById('channels').appendChild(opt)
 					idx += 1
 				}
-				
+
 			})
 			console.log(document.getElementById('channels').seletedIndex)
 			changeChannel()
 		})
 		//document.getElementById('path').textContent = `nodecg${window.location.pathname}`;
 
-		
+
 		// You can access the NodeCG api anytime from the `window.nodecg` object
 		// Or just `nodecg` for short. Like this!:
 		nodecg.log.info('Here\'s an example of using NodeCG\'s logging API!');

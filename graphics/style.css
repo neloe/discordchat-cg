@@ -1,0 +1,51 @@
+body {
+  overflow: hidden;
+  font-family: sans-serif;
+  background-color: black;
+  display:flex;
+  flex-direction:column;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.message {
+  border-radius: 5px;
+  background: #006747;
+  padding: 5px;
+  margin: 2px;
+}
+.content {
+  color: white;
+  margin-left: .5em;
+}
+
+.user {
+  color: RosyBrown;
+  font-weight: bold;
+}
+
+.slide {
+    animation: 1s slide;
+}
+
+@keyframes slide {
+    from {
+      margin-left: -100%;
+      margin-right: 100%;
+    }
+    to {
+      margin-left: 0%;
+      margin-right: 0%;
+    }
+}
+
+.channel {
+  color:cornsilk;
+  font-size: x-large;
+  text-align: center;
+  width: 100%;
+  height:10%;
+  font-family:Hack;
+}
