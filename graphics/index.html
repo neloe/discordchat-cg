@@ -7,7 +7,10 @@
 		body {
 			font-family: sans-serif;
 			background-color: black;
-			overflow: hidden;
+			display:flex;
+			flex-direction:column;
+			height: inherit;
+
 		}
 		body::-webkit-scrollbar {
 			display: none;
@@ -21,18 +24,23 @@
 		}
 		.channel {
 			color:cornsilk;
-			font-size: 110%;
+			font-size: x-large;
 			text-align: center;
 			width: 100%;
+			height:10%;
 			font-family:Hack;
 		}
 		.chatbox {
 			padding: 4px 6px;
 			border: 1px #222 solid;
+			height:90%;
+			display:flex;
+			flex-direction:column;
 			overflow: hidden;
 		}
 		.chatbox p {
 			margin: 0;
+			font-size: large;
 			padding: 3px 6px;
 		}
 		.monospace {
