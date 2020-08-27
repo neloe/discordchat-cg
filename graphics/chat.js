@@ -1,6 +1,7 @@
 const chanRep = nodecg.Replicant('chanRep', { defaultValue: 'general', persistent:true })
 const tokenRep = nodecg.Replicant('tokenRep', {persistent:true})
 const msgs = document.getElementById('messages')
+const guild = client.guilds.fetch('689475018563780646');
 let clientReady = false
 let channelID = null
 let channel = null
@@ -10,7 +11,7 @@ function buildmsg(message) {
   mdiv.setAttribute('class', 'message slide')
   let uspan = document.createElement('span')
   uspan.setAttribute('class', 'user')
-  uspan.textContent = message.author.username + ':'
+  uspan.textContent = guild.member(message.author).displayName + ':'
   let cspan = document.createElement('span')
   cspan.setAttribute('class', 'content')
   cspan.textContent = message.content
